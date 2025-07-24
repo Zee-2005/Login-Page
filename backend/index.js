@@ -1,9 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const mongoConnect = require("./db");
-const path = require("path")
-const staticRoute = require("./routes/static")
-const userRoute = require("./routes/user")
+const path = require("path");
+const staticRoute = require("./routes/static");
+const authRoute = require("./routes/auth");
+const contentRoute = require("./routes/content");
+const authenticateToken = require("./middleware/auth")
 const app = express();
 require("dotenv").config();
 
@@ -19,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use("/", staticRoute);
-app.use("/user", userRoute);
+app.use("/user", authRoute);
+app.use("/content",authenticateToken, contentRoute);
 
 app.listen(process.env.PORT || 8000, () => console.log(`http://localhost:${process.env.PORT}`));
